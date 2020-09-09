@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rotate and Save image in JavaScript</title>
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+        }
+        #btn {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<canvas id="cvs"  width="1024" height="768" style="border:1px solid #ccc;margin:20px auto;display: block;">
+    当前浏览器不支持canvas
+    <!-- 如果浏览器支持canvas，则canvas标签里的内容不会显示出来 -->
+</canvas>
+<button type="button" id="btn" onclick="rotateImage()">Rotate</button>
+</body>
+<script>
+    //获取canvas元素
+    var cvs = document.getElementById("cvs");
+    //创建image对象
+    var img = new Image();
+    img.src = "./images/image.jpg";
+    //待图片加载完后，将其显示在canvas上
+    var ctx = cvs.getContext('2d');
+    img.onload = function(){
+        cvs.width = img.width;
+        cvs.height = img.height;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+    }
+    //rotate image and save it
+    let rotateImage = () => {
+        let img = new Image();
+        img.src = "./images/image.jpg";
+        img.setAttribute("crossOrigin",'Anonymous');
+
+        // Create a canvas object.
+        let canvas = document.createElement("cvs");
+
+        // Wait till the image is loaded.
+        img.onload = function(){
+            rotateImage();
+            saveImage(img.src.replace(/^.*[\\\/]/, ''));
+        }
+
+        let rotateImage = () => {
+            // Create canvas context.
+            let ctx = cvs.getContext("2d");
+            // Assign width and height.
+            cvs.width = img.width;
+            cvs.height = img.height;
+            ctx.translate(img.width,0);
+            // Rotate the image and draw it on the canvas.
+            ctx.rotate(Math.PI /2 );
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+        }
+        // Use python server to test it:python -m http.server 8888
+        let saveImage = (img_name) => {
+            let a = document.createElement('a');
+            a.href = cvs.toDataURL("image/png");
+            a.download = img_name;
+            document.body.appendChild(a);
+            a.click();
+        }
+    }
+
+</script>
+</html>
